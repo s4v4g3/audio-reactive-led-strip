@@ -1,5 +1,6 @@
-# Audio Reactive LED Strip
+# WLED Audio Reactive LED Strip
 Real-time LED strip music visualization using Python and the ESP8266 or Raspberry Pi.
+This is the Aircoookie fork, slightly modified to work with my [WLED](https://github.com/Aircoookie/WLED) project.
 
 ![block diagram](images/block-diagram.png)
 
