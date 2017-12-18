@@ -17,10 +17,10 @@ to control the leds connected to it.
 """
 
 if DEVICE == 'esp8266':
-    UDP_IP = '192.168.0.150'
-    """IP address of the ESP8266. Must match IP in ws2812_controller.ino"""
-    UDP_PORT = 7777
-    """Port number used for socket communication between Python and ESP8266"""
+    UDP_IP = '192.168.1.255'
+    """IP address of the ESP8266. The same you use to access the WLED UI"""
+    UDP_PORT = 21324
+    """Port number used for socket communication between Python and ESP8266, is notifier port"""
     SOFTWARE_GAMMA_CORRECTION = False
     """Set to False because the firmware handles gamma correction + dither"""
 
@@ -49,7 +49,7 @@ DISPLAY_FPS = True
 """Whether to display the FPS when running (can reduce performance)"""
 
 N_PIXELS = 60
-"""Number of pixels in the LED strip (must match ESP8266 firmware)"""
+"""Number of pixels in the LED strip"""
 
 GAMMA_TABLE_PATH = os.path.join(os.path.dirname(__file__), 'gamma_table.npy')
 """Location of the gamma correction table"""
@@ -57,7 +57,7 @@ GAMMA_TABLE_PATH = os.path.join(os.path.dirname(__file__), 'gamma_table.npy')
 MIC_RATE = 44100
 """Sampling frequency of the microphone in Hz"""
 
-FPS = 60
+FPS = 30
 """Desired refresh rate of the visualization (frames per second)
 
 FPS indicates the desired refresh rate, or frames-per-second, of the audio
