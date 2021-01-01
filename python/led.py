@@ -59,6 +59,14 @@ pixel_map = [
     (0, 80, 0, True),
     (0, 80, 209, False)
 ]
+
+pixel_map = [
+    (0, 80, 0, True),
+    (0, 80, 209, False),
+    (15, 50, 80, True),
+    (15, 50, 259, False)
+]
+
 def _update_esp8266():
     global pixels
     tr_pixels = np.clip(pixels, 0, 255).astype(int).transpose()
