@@ -42,7 +42,49 @@ pixels = np.tile(1, (3, config.N_PIXELS))
 
 _is_python_2 = int(platform.python_version_tuple()[0]) == 2
 
+# 0..24   -> 235..259
+# 25..129 -> 0..104
+# 0..129  -> 234..105 (reversed)
+
+# (pixel_index, length, dest_index, direction)
+
+NUM_PIXELS = 260
+pixel_map = [
+    (0, 25, 235, True),
+    (25, 105, 0, True),
+    (0, 130, 234, False)
+]
+
+pixel_map = [
+    (0, 80, 0, True),
+    (0, 80, 209, False)
+]
 def _update_esp8266():
+    global pixels
+    tr_pixels = np.clip(pixels, 0, 255).astype(int).transpose()
+
+    mapped_pixels = [[0,0,0]] * NUM_PIXELS
+    for pixel_index, length, dest_index, forward in pixel_map:
+        for i in range(0, length):
+            mapped_pixels[dest_index] = tr_pixels[pixel_index + i]
+            if forward:
+                dest_index += 1
+            else:
+                dest_index -= 1
+
+    m = [2, 2]
+    for i in range(0, len(mapped_pixels)):
+        m.append(mapped_pixels[i][0])
+        m.append(mapped_pixels[i][1])
+        m.append(mapped_pixels[i][2])
+
+    _sock.sendto(bytes(m), (config.UDP_IP, config.UDP_PORT))
+    #_prev_pixels = np.copy(pixels)
+
+
+
+
+def _update_esp8266_old():
     """Sends UDP packets to ESP8266 to update LED strip values
 
     The ESP8266 will receive and decode the packets to determine what values
@@ -73,13 +115,15 @@ def _update_esp8266():
         if _is_python_2:
             m+= chr(1) + chr(2)
         else:
-            m.append(1)
+            m.append(4)
             m.append(2)
         for i in packet_indices:
             if _is_python_2:
                 m += chr(i) + chr(p[0][i]) + chr(p[1][i]) + chr(p[2][i])
             else:
-                m.append(i)  # Index of pixel to change
+                #m.append(i)  # Index of pixel to change
+                m.append(i & 255)  # Index of pixel to change MSB
+                m.append(i >> 8)  # Index of pixel to change MSB
                 m.append(p[0][i])  # Pixel red value
                 m.append(p[1][i])  # Pixel green value
                 m.append(p[2][i])  # Pixel blue value

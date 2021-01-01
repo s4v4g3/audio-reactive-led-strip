@@ -17,7 +17,7 @@ to control the leds connected to it.
 """
 
 if DEVICE == 'esp8266':
-    UDP_IP = '192.168.1.255'
+    UDP_IP = '10.4.1.64'
     """IP address of the ESP8266. The same you use to access the WLED UI"""
     UDP_PORT = 21324
     """Port number used for socket communication between Python and ESP8266, is notifier port"""
@@ -48,7 +48,7 @@ USE_GUI = True
 DISPLAY_FPS = True
 """Whether to display the FPS when running (can reduce performance)"""
 
-N_PIXELS = 60
+N_PIXELS = 80
 """Number of pixels in the LED strip"""
 
 GAMMA_TABLE_PATH = os.path.join(os.path.dirname(__file__), 'gamma_table.npy')
