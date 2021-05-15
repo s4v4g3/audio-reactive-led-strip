@@ -67,6 +67,11 @@ pixel_map = [
     (15, 50, 259, False)
 ]
 
+# no reversals
+pixel_map = [
+    (0, 154, 0, True)
+]
+
 def _update_esp8266():
     global pixels
     tr_pixels = np.clip(pixels, 0, 255).astype(int).transpose()
@@ -86,7 +91,8 @@ def _update_esp8266():
         m.append(mapped_pixels[i][1])
         m.append(mapped_pixels[i][2])
 
-    _sock.sendto(bytes(m), (config.UDP_IP, config.UDP_PORT))
+    for ip in config.UDP_IP:
+        _sock.sendto(bytes(m), (ip, config.UDP_PORT))
     #_prev_pixels = np.copy(pixels)
 
 
@@ -136,7 +142,8 @@ def _update_esp8266_old():
                 m.append(p[1][i])  # Pixel green value
                 m.append(p[2][i])  # Pixel blue value
         m = m if _is_python_2 else bytes(m)
-        _sock.sendto(m, (config.UDP_IP, config.UDP_PORT))
+        for ip in config.UDP_IP:
+            _sock.sendto(m, (ip, config.UDP_PORT))
     _prev_pixels = np.copy(p)
 
 
