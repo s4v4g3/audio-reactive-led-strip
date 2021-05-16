@@ -3,6 +3,12 @@ from __future__ import print_function
 from __future__ import division
 import os
 
+VISUALIZATION_EFFECT_SPECTRUM = 0
+VISUALIZATION_EFFECT_ENERGY = 1
+VISUALIZATION_EFFECT_SCROLLING = 2
+
+VISUALIZATION_EFFECT = VISUALIZATION_EFFECT_SPECTRUM
+
 DEVICE = 'esp8266'
 """Device used to control LED strip. Must be 'pi',  'esp8266' or 'blinkstick'
 

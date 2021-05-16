@@ -248,8 +248,12 @@ samples_per_frame = int(config.MIC_RATE / config.FPS)
 # Array containing the rolling audio sample window
 y_roll = np.random.rand(config.N_ROLLING_HISTORY, samples_per_frame) / 1e16
 
-visualization_effect = visualize_spectrum
 """Visualization effect to display on the LED strip"""
+visualization_effect = visualize_spectrum
+if config.VISUALIZATION_EFFECT == config.VISUALIZATION_EFFECT_ENERGY:
+    visualization_effect = visualize_energy
+if config.VISUALIZATION_EFFECT == config.VISUALIZATION_EFFECT_SCROLLING:
+    visualization_effect = visualize_scroll
 
 
 if __name__ == '__main__':
