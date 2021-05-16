@@ -48,7 +48,7 @@ _is_python_2 = int(platform.python_version_tuple()[0]) == 2
 
 # (pixel_index, length, dest_index, direction)
 
-NUM_PIXELS = 260
+NUM_PIXELS = 154
 pixel_map = [
     (0, 25, 235, True),
     (25, 105, 0, True),
