@@ -4,6 +4,7 @@ from __future__ import division
 import platform
 import numpy as np
 import config
+import datetime
 
 # ESP8266 uses WiFi communication
 if config.DEVICE == 'esp8266':
@@ -42,6 +43,9 @@ pixels = np.tile(1, (3, config.N_PIXELS))
 
 _is_python_2 = int(platform.python_version_tuple()[0]) == 2
 
+last_payload = None
+last_update_time = 0
+
 # 0..24   -> 235..259
 # 25..129 -> 0..104
 # 0..129  -> 234..105 (reversed)
@@ -74,6 +78,8 @@ pixel_map = [
 
 def _update_esp8266():
     global pixels
+    global last_payload
+    global last_update_time
     tr_pixels = np.clip(pixels, 0, 255).astype(int).transpose()
 
     mapped_pixels = [[0,0,0]] * NUM_PIXELS
@@ -91,8 +97,14 @@ def _update_esp8266():
         m.append(mapped_pixels[i][1])
         m.append(mapped_pixels[i][2])
 
-    for ip in config.UDP_IP:
-        _sock.sendto(bytes(m), (ip, config.UDP_PORT))
+    payload = bytes(m)
+    now = datetime.datetime.now().timestamp()
+    if payload != last_payload or (now - last_update_time) > 2:
+        for ip in config.UDP_IP:
+            _sock.sendto(payload, (ip, config.UDP_PORT))
+        last_payload = payload
+        last_update_time = now
+
     #_prev_pixels = np.copy(pixels)
 
 
